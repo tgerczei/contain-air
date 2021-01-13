@@ -16,6 +16,18 @@ RUN	apk --update --no-cache add build-base && \
         find /tmp/wheels -type f -name '*.whl' | xargs -I{} cp -v {} /wheels/
 
 FROM python:3.7-alpine
+
+ARG BUILD_DATE
+
+LABEL org.opencontainers.image.title="py-air-control-exporter"
+LABEL org.opencontainers.image.description="Exports Prometheus metrics from Philips smart air purifier devices."
+LABEL org.opencontainers.image.version="0.3.0"
+LABEL org.opencontainers.image.url="https://github.com/urbas/py-air-control-exporter"
+LABEL org.opencontainers.image.authors="Tamás Gérczei <tamas@gerczei.eu>"
+LABEL org.opencontainers.image.created="${BUILD_DATE}"
+LABEL org.opencontainers.image.source="https://github.com/tgerczei/contain-air"
+LABEL org.opencontainers.image.vendor="Gérczei Tamás E.V."
+
 COPY --from=builder /wheels /packages
 
 RUN	python -m pip install --no-cache-dir --no-index --find-links=packages/ \
